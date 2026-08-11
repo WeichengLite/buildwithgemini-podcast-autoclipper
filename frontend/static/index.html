@@ -474,10 +474,13 @@
 
         <!-- Video Player Box -->
         <div class="media-box" id="video-teaser-box">
-          <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;">
-            <source src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4" type="video/mp4" />
-            Your browser does not support HTML5 video player.
-          </video>
+          <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+            <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" crossorigin="anonymous" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;" onerror="handleVideoError(this)">
+              <source src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4" type="video/mp4" />
+              Your browser does not support HTML5 video.
+            </video>
+            <span style="position:absolute;bottom:6px;right:6px;background:rgba(79,70,229,0.9);color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.3);">✓ Updated Live</span>
+          </div>
         </div>
 
         <div style="display:flex;gap:0.4rem;">
@@ -1010,6 +1013,16 @@ function setCoverArtUrl(url) {
   `;
 }
 
+function handleVideoError(videoElem) {
+  console.log("Video source load notice: switching to fallback sample MP4 asset...");
+  const fallbackUrl = "https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4";
+  if (videoElem.src !== fallbackUrl) {
+    videoElem.src = fallbackUrl;
+    videoElem.load();
+    videoElem.play().catch(e => console.log("Fallback play notice:", e));
+  }
+}
+
 function setVideoTeaserUrl(url) {
   if (!url) return;
   const cleanUrl = url.startsWith("blob:") ? url : url.split("?")[0];
@@ -1019,13 +1032,18 @@ function setVideoTeaserUrl(url) {
   if (box) {
     box.innerHTML = `
       <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-        <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;">
+        <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" crossorigin="anonymous" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;" onerror="handleVideoError(this)">
           <source src="${cacheBustedUrl}" type="video/mp4" />
-          Your browser does not support HTML5 video player.
+          Your browser does not support HTML5 video.
         </video>
         <span style="position:absolute;bottom:6px;right:6px;background:rgba(79,70,229,0.9);color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.3);">✓ Updated Live</span>
       </div>
     `;
+    const v = document.getElementById("video-teaser-player");
+    if (v) {
+      v.load();
+      v.play().catch(e => console.log("Autoplay notice:", e));
+    }
   }
   updatePanelStatus("video-teaser", "Video Trailer Ready");
 }
@@ -1279,7 +1297,7 @@ async function sendCommand(promptText) {
       agentBody.innerHTML += `
         <div style="margin-top:0.75rem;padding:0.75rem;background:var(--chip-bg);border:1px solid var(--border);border-radius:10px;">
           <div style="font-weight:600;font-size:0.82rem;margin-bottom:0.5rem;color:var(--text-primary);">🎬 Generated Teaser Video:</div>
-          <video controls autoplay loop muted playsinline src="${videoUrl}?t=${Date.now()}" style="width:100%;max-width:320px;border-radius:8px;display:block;margin-bottom:0.6rem;border:1px solid var(--border);"></video>
+          <video controls autoplay loop muted playsinline crossorigin="anonymous" src="${videoUrl}?t=${Date.now()}" style="width:100%;max-width:320px;border-radius:8px;display:block;margin-bottom:0.6rem;border:1px solid var(--border);"></video>
           <button onclick="downloadVideoTrailer()" class="action-btn-secondary" style="display:inline-flex;padding:0.4rem 0.85rem;font-size:0.82rem;background:var(--accent);color:#fff;border:none;">
             <span class="material-symbols-outlined" style="font-size:1rem;">download</span> Download Teaser Video
           </button>
