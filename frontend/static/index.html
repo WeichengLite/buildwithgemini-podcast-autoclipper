@@ -472,14 +472,37 @@
         <button class="action-btn-secondary" onclick="usePromptTip('spotify_page')">💡 Spotify Prompt Tip</button>
       </div>
 
-      <!-- 4. Audio Snippet Panel -->
+      <!-- 4. Audio Snippet Panel & Full Audio File Uploader -->
       <div class="studio-card" id="card-audio-clip">
         <div class="card-header">
           <h3><span class="material-symbols-outlined" style="color:#f59e0b;">content_cut</span> 4. Audio Snippet Trimmer</h3>
           <span class="live-badge" id="audio-clip-badge">Ready</span>
         </div>
-        <div style="display:flex;flex-direction:column;gap:0.75rem;min-height:160px;justify-content:center;">
-          <div style="font-size:0.82rem;color:var(--text-secondary);">30s Promotional Highlight Clip:</div>
+        
+        <!-- Source Full Audio Upload Zone -->
+        <div style="background:var(--chip-bg);border:1px dashed var(--border);border-radius:10px;padding:0.65rem 0.85rem;display:flex;flex-direction:column;gap:0.4rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.8rem;font-weight:600;color:var(--text-primary);">
+            <span>📁 Upload Full Episode Audio (.MP3/.WAV):</span>
+            <span id="audio-source-name" style="font-weight:400;color:var(--accent);">ep_001_raw.mp3</span>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <input type="file" id="full-audio-input" accept=".mp3,.wav,.m4a,.aac" style="display:none;" onchange="handleFullAudioUpload(event)" />
+            <button class="action-btn-secondary" style="flex:1;font-size:0.75rem;padding:0.35rem 0.5rem;" onclick="document.getElementById('full-audio-input').click()">
+              ⬆️ Upload MP3 File
+            </button>
+            <button class="action-btn-secondary" style="flex:1;font-size:0.75rem;padding:0.35rem 0.5rem;" onclick="loadSampleFullAudio()">
+              🎵 Load Sample MP3
+            </button>
+          </div>
+          <audio id="full-audio-source-player" controls src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/audio_clips/ep_001_highlight.mp3" style="width:100%;height:32px;margin-top:0.2rem;"></audio>
+        </div>
+
+        <!-- Trimmed Promotional Snippet Output -->
+        <div style="display:flex;flex-direction:column;gap:0.5rem;min-height:100px;justify-content:center;">
+          <div style="font-size:0.8rem;font-weight:600;color:var(--text-primary);display:flex;align-items:center;justify-content:space-between;">
+            <span>✂️ Trimmed Promotional Highlight (30s):</span>
+            <span id="snippet-timestamp-tag" style="font-size:0.7rem;color:var(--accent);font-weight:700;">[02:15 - 05:45]</span>
+          </div>
           <audio id="audio-preview-player" controls src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/audio_clips/ep_001_highlight.mp3"></audio>
           <a id="audio-download-link" href="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/audio_clips/ep_001_highlight.mp3" target="_blank" download class="action-btn-secondary" style="font-size:0.8rem;">
             <span class="material-symbols-outlined">download</span> Download Highlight Audio MP3
@@ -630,7 +653,7 @@ function loadEpisodeConversation(epId) {
       <div class="msg-item agent">
         <div class="msg-avatar">🎙️</div>
         <div class="msg-body">
-          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Click any prompt tip or select a timestamped segment from the Script & Timeline Locator above to cut video/audio clips!
+          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Upload a full episode <strong>.mp3</strong> file in Card #4 or select a timestamped segment above to cut promotional clips!
         </div>
       </div>
     `;
@@ -840,7 +863,6 @@ function handleScriptUpload(event) {
         alert("Could not parse JSON transcript file.");
       }
     } else {
-      // Parse line-by-line SRT/VTT/TXT/CSV timestamps
       const lines = text.split("\n");
       lines.forEach((line, idx) => {
         const timeMatch = line.match(/(\d{2}:\d{2}(?::\d{2})?\s*-->\s*\d{2}:\d{2}(?::\d{2})?|\d{2}:\d{2}\s*-\s*\d{2}:\d{2})/);
@@ -856,7 +878,6 @@ function handleScriptUpload(event) {
     }
 
     if (parsedItems.length === 0) {
-      // Fallback if generic text
       parsedItems = [
         { time: "00:00 - 01:30", title: `Uploaded Script (${file.name}): Highlight 1`, highlight: true },
         { time: "01:30 - 04:00", title: `Uploaded Script (${file.name}): Key Topic Discussion`, highlight: true },
@@ -869,10 +890,46 @@ function handleScriptUpload(event) {
   reader.readAsText(file);
 }
 
+function handleFullAudioUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const objectUrl = URL.createObjectURL(file);
+  const player = document.getElementById("full-audio-source-player");
+  if (player) {
+    player.src = objectUrl;
+  }
+  const nameLabel = document.getElementById("audio-source-name");
+  if (nameLabel) {
+    nameLabel.textContent = file.name;
+  }
+  updatePanelStatus("audio-clip", `MP3 Source Loaded: ${file.name}`);
+}
+
+function loadSampleFullAudio() {
+  const sampleUrl = "https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/audio_clips/ep_001_highlight.mp3";
+  const player = document.getElementById("full-audio-source-player");
+  if (player) {
+    player.src = sampleUrl;
+  }
+  const nameLabel = document.getElementById("audio-source-name");
+  if (nameLabel) {
+    nameLabel.textContent = "ep_001_quantum_ai_full.mp3";
+  }
+  updatePanelStatus("audio-clip", "Sample Full MP3 Loaded");
+}
+
 function selectTimeSegmentForCut(timeRange, segmentTitle, cutType) {
   if (cutType === "audio") {
+    // Update snippet tag in Card 4
+    const snippetTag = document.getElementById("snippet-timestamp-tag");
+    if (snippetTag) {
+      snippetTag.textContent = `[${timeRange}]`;
+    }
+    updatePanelStatus("audio-clip", `Trimmed Snippet (${timeRange})`);
     consoleInput.value = `Extract 30-second audio highlight clip for segment [${timeRange}] "${segmentTitle}" for episode ${currentEpId}.`;
   } else {
+    updatePanelStatus("video-teaser", `Video Cut (${timeRange})`);
     consoleInput.value = `Generate promotional video trailer using gemini-omni-flash-preview for segment [${timeRange}] "${segmentTitle}" for episode ${currentEpId}.`;
   }
   consoleInput.focus();

@@ -1,6 +1,6 @@
 # 🎙️ Podcast AutoClipper Studio
 
-> **An AI-powered podcast post-production web studio that transforms raw audio into publishable packages—show notes, timestamps, guest profiles, AI cover art, Omni video trailers, script timeline locators, and RSS distribution feeds.**
+> **An AI-powered podcast post-production web studio that transforms raw audio into publishable packages—show notes, timestamps, guest profiles, AI cover art, Omni video trailers, script timeline locators, full episode audio uploaders, and RSS distribution feeds.**
 
 ![Podcast AutoClipper Demo](demo.gif)
 
@@ -14,6 +14,7 @@ Podcast creators spend hours manually drafting show notes, timestamping key mome
 
 - 🎛️ **Episode Manager**: Easily **add**, **edit** (episode name & featured guest), and **delete** episodes with full state persistence.
 - 💬 **Per-Episode Persistent Conversations**: Saves full chat logs and history independently for each episode in browser storage, allowing seamless context switching between episode sessions.
+- 📁 **Full Episode Audio Uploader & Snippet Sync**: Upload raw full-length podcast audio (`.mp3`, `.wav`, `.m4a`, `.aac`) or load sample MP3 files. Syncs directly with script timeline timestamps to preview and cut 30-second promotional audio snippets.
 - 📜 **Script & Timestamp Timeline Locator**: Upload transcript/script files (`.srt`, `.vtt`, `.json`, `.txt`, `.csv`) or load sample scripts. Parses timestamped segments so video and audio editors can instantly locate best moments for video and audio clipping.
 - 🎨 **Instant Web Cover Art & Cache-Busting**: Generates high-resolution square cover art images and instantly renders/updates them on the web dashboard with direct download support.
 - 🎬 **Omni Video Teaser Trailers**: Produces promotional video teasers using Google's **Omni Model** (`gemini-omni-flash-preview`) and embeds them in a live video player.
@@ -25,28 +26,32 @@ Podcast creators spend hours manually drafting show notes, timestamping key mome
 
 ## ✨ Key Features
 
-1. **Script & Timestamp Timeline Locator**:
+1. **Full Episode Audio Uploader & Snippet Sync**:
+   - Upload full `.mp3` or `.wav` episode audio files directly in **Card #4 (Audio Snippet Trimmer)**.
+   - Pair uploaded audio with timestamp segments from the Script Timeline to cut precision 30-second promotional audio clips.
+   - Includes one-click `Download Highlight Audio MP3` for immediate promotional distribution.
+2. **Script & Timestamp Timeline Locator**:
    - Upload transcript files in **.SRT**, **.VTT**, **.JSON**, **.TXT**, or **.CSV** formats.
    - Parses timeline timestamps (e.g. `[02:15 - 05:45]`) and highlights key podcast moments.
    - Includes one-click `✂️ Cut Audio` and `🎬 Cut Video` locator buttons that populate the trimmer prompt for instant clip extraction.
-2. **Episode Management Panel**:
+3. **Episode Management Panel**:
    - Add new episodes with custom IDs, titles, guest names, and durations.
    - Edit episode metadata on the fly or delete completed episodes.
-3. **Per-Episode Persistent Session Storage**:
+4. **Per-Episode Persistent Session Storage**:
    - Independent chat logs automatically saved per episode, making tracking past AI outputs effortless.
-4. **6 Dedicated Live Update Panels**:
+5. **6 Dedicated Live Update Panels**:
    - Real-time updates with glowing visual badges (`✓ Updated Live`) as soon as the agent completes work:
      1. **AI Cover Art** (Image render + Download button)
      2. **Video Trailer** (Omni video player)
      3. **Spotify Intro & Show Notes** (Formatted notes + `.txt` file link)
-     4. **Audio Snippet Trimmer** (Waveform player + MP3 download)
+     4. **Audio Snippet Trimmer & MP3 Source Uploader** (Waveform player + MP3 download)
      5. **RSS Distribution Feed** (XML URL + Open feed link)
      6. **Full Package Overview** (Executive post-production breakdown)
-5. **AI Visual & Video Studio**:
+6. **AI Visual & Video Studio**:
    - Integrated image generation for artwork and video trailer synthesis via `gemini-omni-flash-preview`.
-6. **Cross-Session Memory Bank**:
+7. **Cross-Session Memory Bank**:
    - Persists host brand tone, recurring sponsors, and episode structure preferences across sessions using Vertex AI Memory Bank.
-7. **Grounding Knowledge Retrieval (RAG)**:
+8. **Grounding Knowledge Retrieval (RAG)**:
    - Grounded on `podcast_playbook.txt` via Vertex AI RAG Engine for strict editorial standards.
 
 ---
@@ -77,7 +82,7 @@ podcast-autoclipper/
 ├── frontend/
 │   ├── main.py                # FastAPI proxy connecting browser to deployed A2A agent
 │   ├── static/
-│   │   └── index.html         # Web Studio Dashboard with Timeline Locator & Live Panels
+│   │   └── index.html         # Web Studio Dashboard with MP3 Uploader, Timeline Locator & Live Panels
 │   └── requirements.txt
 ├── scripts/
 │   └── generate_demo_gif.py   # Script generating the animated demo GIF
