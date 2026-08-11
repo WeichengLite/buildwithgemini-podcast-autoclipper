@@ -1,0 +1,937 @@
+{
+  "eval_case_results": [
+    {
+      "eval_case_index": 0,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The agent correctly calculated the answer using the required tool and provided an accurate, concise, and clear response that matches the expected answer.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    },
+    {
+      "eval_case_index": 1,
+      "response_candidate_results": [
+        {
+          "response_index": 0,
+          "metric_results": {
+            "custom_response_quality": {
+              "metric_name": "custom_response_quality",
+              "score": 5.0,
+              "explanation": "The agent correctly converted 50 kilometers to miles using the tool and provided an accurate, clear response matching the expected answer.",
+              "rubric_verdicts": null,
+              "raw_output": null,
+              "error_message": null
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "summary_metrics": [
+    {
+      "metric_name": "custom_response_quality",
+      "num_cases_total": 2,
+      "num_cases_valid": 2,
+      "num_cases_error": 0,
+      "mean_score": 5.0,
+      "stdev_score": 0.0,
+      "pass_rate": null
+    }
+  ],
+  "win_rates": null,
+  "evaluation_dataset": [
+    {
+      "bigquery_source": null,
+      "gcs_source": null,
+      "eval_cases": [
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "What is 15 * 14 + 10?",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "15 * 14 + 10 = 220",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "The answer is 220.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "math_calculation",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": {
+              "root_agent": {
+                "agent_id": "root_agent",
+                "agent_type": "LlmAgent",
+                "description": "",
+                "instruction": "You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.",
+                "tools": [
+                  {
+                    "retrieval": null,
+                    "computer_use": null,
+                    "file_search": null,
+                    "google_search": null,
+                    "google_maps": null,
+                    "code_execution": null,
+                    "enterprise_web_search": null,
+                    "function_declarations": [
+                      {
+                        "description": "Evaluates a mathematical expression safely.\n\nArgs:\n    expression: A mathematical expression as a string (e.g. \"2 + 2\", \"sqrt(16) * 5\", \"10 ** 2 / 4\").\n\nReturns:\n    The numerical result of evaluating the expression, or an error message.",
+                        "name": "calculate",
+                        "parameters": {
+                          "additional_properties": null,
+                          "defs": null,
+                          "ref": null,
+                          "any_of": null,
+                          "default": null,
+                          "description": null,
+                          "enum": null,
+                          "example": null,
+                          "format": null,
+                          "items": null,
+                          "max_items": null,
+                          "max_length": null,
+                          "max_properties": null,
+                          "maximum": null,
+                          "min_items": null,
+                          "min_length": null,
+                          "min_properties": null,
+                          "minimum": null,
+                          "nullable": null,
+                          "pattern": null,
+                          "properties": {
+                            "expression": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            }
+                          },
+                          "property_ordering": null,
+                          "required": [
+                            "expression"
+                          ],
+                          "title": null,
+                          "type": "OBJECT"
+                        },
+                        "parameters_json_schema": null,
+                        "response": null,
+                        "response_json_schema": null,
+                        "behavior": null
+                      }
+                    ],
+                    "google_search_retrieval": null,
+                    "parallel_ai_search": null,
+                    "url_context": null,
+                    "mcp_servers": null,
+                    "exa_ai_search": null
+                  },
+                  {
+                    "retrieval": null,
+                    "computer_use": null,
+                    "file_search": null,
+                    "google_search": null,
+                    "google_maps": null,
+                    "code_execution": null,
+                    "enterprise_web_search": null,
+                    "function_declarations": [
+                      {
+                        "description": "Converts a value between measurement units.\n\nArgs:\n    value: The numerical quantity to convert.\n    from_unit: Source unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n    to_unit: Target unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n\nReturns:\n    A string describing the conversion result.",
+                        "name": "unit_convert",
+                        "parameters": {
+                          "additional_properties": null,
+                          "defs": null,
+                          "ref": null,
+                          "any_of": null,
+                          "default": null,
+                          "description": null,
+                          "enum": null,
+                          "example": null,
+                          "format": null,
+                          "items": null,
+                          "max_items": null,
+                          "max_length": null,
+                          "max_properties": null,
+                          "maximum": null,
+                          "min_items": null,
+                          "min_length": null,
+                          "min_properties": null,
+                          "minimum": null,
+                          "nullable": null,
+                          "pattern": null,
+                          "properties": {
+                            "value": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "NUMBER"
+                            },
+                            "from_unit": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            },
+                            "to_unit": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            }
+                          },
+                          "property_ordering": null,
+                          "required": [
+                            "value",
+                            "from_unit",
+                            "to_unit"
+                          ],
+                          "title": null,
+                          "type": "OBJECT"
+                        },
+                        "parameters_json_schema": null,
+                        "response": null,
+                        "response_json_schema": null,
+                        "behavior": null
+                      }
+                    ],
+                    "google_search_retrieval": null,
+                    "parallel_ai_search": null,
+                    "url_context": null,
+                    "mcp_servers": null,
+                    "exa_ai_search": null
+                  }
+                ],
+                "sub_agents": []
+              }
+            },
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": {
+                            "id": "call_16827",
+                            "args": {
+                              "expression": "15 * 14 + 10"
+                            },
+                            "name": "calculate",
+                            "partial_args": null,
+                            "will_continue": null
+                          },
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": null,
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": {
+                            "will_continue": null,
+                            "scheduling": null,
+                            "parts": null,
+                            "id": "call_16827",
+                            "name": "calculate",
+                            "response": {
+                              "result": "Result: 220"
+                            }
+                          },
+                          "inline_data": null,
+                          "text": null,
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "user"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "15 * 14 + 10 = 220",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        },
+        {
+          "prompt": {
+            "parts": [
+              {
+                "media_resolution": null,
+                "code_execution_result": null,
+                "executable_code": null,
+                "file_data": null,
+                "function_call": null,
+                "function_response": null,
+                "inline_data": null,
+                "text": "Convert 50 km to miles",
+                "thought": null,
+                "thought_signature": null,
+                "video_metadata": null,
+                "tool_call": null,
+                "tool_response": null,
+                "part_metadata": null,
+                "audio_transcription": null
+              }
+            ],
+            "role": "user"
+          },
+          "responses": [
+            {
+              "response": {
+                "parts": [
+                  {
+                    "media_resolution": null,
+                    "code_execution_result": null,
+                    "executable_code": null,
+                    "file_data": null,
+                    "function_call": null,
+                    "function_response": null,
+                    "inline_data": null,
+                    "text": "50 kilometers is equal to **31.07 miles**.",
+                    "thought": null,
+                    "thought_signature": null,
+                    "video_metadata": null,
+                    "tool_call": null,
+                    "tool_response": null,
+                    "part_metadata": null,
+                    "audio_transcription": null
+                  }
+                ],
+                "role": "model"
+              }
+            }
+          ],
+          "reference": {
+            "response": {
+              "parts": [
+                {
+                  "media_resolution": null,
+                  "code_execution_result": null,
+                  "executable_code": null,
+                  "file_data": null,
+                  "function_call": null,
+                  "function_response": null,
+                  "inline_data": null,
+                  "text": "50 km is equal to 31.07 miles.",
+                  "thought": null,
+                  "thought_signature": null,
+                  "video_metadata": null,
+                  "tool_call": null,
+                  "tool_response": null,
+                  "part_metadata": null,
+                  "audio_transcription": null
+                }
+              ],
+              "role": "model"
+            }
+          },
+          "system_instruction": null,
+          "conversation_history": null,
+          "rubric_groups": null,
+          "eval_case_id": "unit_conversion",
+          "intermediate_events": null,
+          "agent_info": null,
+          "agent_data": {
+            "agents": {
+              "root_agent": {
+                "agent_id": "root_agent",
+                "agent_type": "LlmAgent",
+                "description": "",
+                "instruction": "You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.",
+                "tools": [
+                  {
+                    "retrieval": null,
+                    "computer_use": null,
+                    "file_search": null,
+                    "google_search": null,
+                    "google_maps": null,
+                    "code_execution": null,
+                    "enterprise_web_search": null,
+                    "function_declarations": [
+                      {
+                        "description": "Evaluates a mathematical expression safely.\n\nArgs:\n    expression: A mathematical expression as a string (e.g. \"2 + 2\", \"sqrt(16) * 5\", \"10 ** 2 / 4\").\n\nReturns:\n    The numerical result of evaluating the expression, or an error message.",
+                        "name": "calculate",
+                        "parameters": {
+                          "additional_properties": null,
+                          "defs": null,
+                          "ref": null,
+                          "any_of": null,
+                          "default": null,
+                          "description": null,
+                          "enum": null,
+                          "example": null,
+                          "format": null,
+                          "items": null,
+                          "max_items": null,
+                          "max_length": null,
+                          "max_properties": null,
+                          "maximum": null,
+                          "min_items": null,
+                          "min_length": null,
+                          "min_properties": null,
+                          "minimum": null,
+                          "nullable": null,
+                          "pattern": null,
+                          "properties": {
+                            "expression": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            }
+                          },
+                          "property_ordering": null,
+                          "required": [
+                            "expression"
+                          ],
+                          "title": null,
+                          "type": "OBJECT"
+                        },
+                        "parameters_json_schema": null,
+                        "response": null,
+                        "response_json_schema": null,
+                        "behavior": null
+                      }
+                    ],
+                    "google_search_retrieval": null,
+                    "parallel_ai_search": null,
+                    "url_context": null,
+                    "mcp_servers": null,
+                    "exa_ai_search": null
+                  },
+                  {
+                    "retrieval": null,
+                    "computer_use": null,
+                    "file_search": null,
+                    "google_search": null,
+                    "google_maps": null,
+                    "code_execution": null,
+                    "enterprise_web_search": null,
+                    "function_declarations": [
+                      {
+                        "description": "Converts a value between measurement units.\n\nArgs:\n    value: The numerical quantity to convert.\n    from_unit: Source unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n    to_unit: Target unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n\nReturns:\n    A string describing the conversion result.",
+                        "name": "unit_convert",
+                        "parameters": {
+                          "additional_properties": null,
+                          "defs": null,
+                          "ref": null,
+                          "any_of": null,
+                          "default": null,
+                          "description": null,
+                          "enum": null,
+                          "example": null,
+                          "format": null,
+                          "items": null,
+                          "max_items": null,
+                          "max_length": null,
+                          "max_properties": null,
+                          "maximum": null,
+                          "min_items": null,
+                          "min_length": null,
+                          "min_properties": null,
+                          "minimum": null,
+                          "nullable": null,
+                          "pattern": null,
+                          "properties": {
+                            "value": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "NUMBER"
+                            },
+                            "from_unit": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            },
+                            "to_unit": {
+                              "additional_properties": null,
+                              "defs": null,
+                              "ref": null,
+                              "any_of": null,
+                              "default": null,
+                              "description": null,
+                              "enum": null,
+                              "example": null,
+                              "format": null,
+                              "items": null,
+                              "max_items": null,
+                              "max_length": null,
+                              "max_properties": null,
+                              "maximum": null,
+                              "min_items": null,
+                              "min_length": null,
+                              "min_properties": null,
+                              "minimum": null,
+                              "nullable": null,
+                              "pattern": null,
+                              "properties": null,
+                              "property_ordering": null,
+                              "required": null,
+                              "title": null,
+                              "type": "STRING"
+                            }
+                          },
+                          "property_ordering": null,
+                          "required": [
+                            "value",
+                            "from_unit",
+                            "to_unit"
+                          ],
+                          "title": null,
+                          "type": "OBJECT"
+                        },
+                        "parameters_json_schema": null,
+                        "response": null,
+                        "response_json_schema": null,
+                        "behavior": null
+                      }
+                    ],
+                    "google_search_retrieval": null,
+                    "parallel_ai_search": null,
+                    "url_context": null,
+                    "mcp_servers": null,
+                    "exa_ai_search": null
+                  }
+                ],
+                "sub_agents": []
+              }
+            },
+            "turns": [
+              {
+                "turn_index": 0,
+                "turn_id": "turn_0",
+                "events": [
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": {
+                            "id": "call_71440",
+                            "args": {
+                              "from_unit": "km",
+                              "value": 50,
+                              "to_unit": "miles"
+                            },
+                            "name": "unit_convert",
+                            "partial_args": null,
+                            "will_continue": null
+                          },
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": null,
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": {
+                            "will_continue": null,
+                            "scheduling": null,
+                            "parts": null,
+                            "id": "call_71440",
+                            "name": "unit_convert",
+                            "response": {
+                              "result": "50 km = 31.07 miles"
+                            }
+                          },
+                          "inline_data": null,
+                          "text": null,
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "user"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  },
+                  {
+                    "author": "root_agent",
+                    "content": {
+                      "parts": [
+                        {
+                          "media_resolution": null,
+                          "code_execution_result": null,
+                          "executable_code": null,
+                          "file_data": null,
+                          "function_call": null,
+                          "function_response": null,
+                          "inline_data": null,
+                          "text": "50 kilometers is equal to **31.07 miles**.",
+                          "thought": null,
+                          "thought_signature": null,
+                          "video_metadata": null,
+                          "tool_call": null,
+                          "tool_response": null,
+                          "part_metadata": null,
+                          "audio_transcription": null
+                        }
+                      ],
+                      "role": "model"
+                    },
+                    "event_time": null,
+                    "state_delta": null,
+                    "active_tools": null
+                  }
+                ]
+              }
+            ]
+          },
+          "user_scenario": null
+        }
+      ],
+      "eval_dataset_df": null,
+      "candidate_name": null
+    }
+  ],
+  "metadata": {
+    "candidate_names": [
+      "candidate_1"
+    ],
+    "dataset_name": null,
+    "dataset_id": null,
+    "creation_timestamp": "2026-08-11T20:48:51.898236Z",
+    "dataset": [
+      {
+        "prompt_display_text": "What is 15 * 14 + 10?",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"What is 15 * 14 + 10?\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "The answer is 220.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"The answer is 220.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "15 * 14 + 10 = 220",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"15 * 14 + 10 = 220\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"agents\": {\"root_agent\": {\"agent_id\": \"root_agent\", \"agent_type\": \"LlmAgent\", \"description\": \"\", \"instruction\": \"You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.\", \"tools\": [{\"function_declarations\": [{\"description\": \"Evaluates a mathematical expression safely.\\n\\nArgs:\\n    expression: A mathematical expression as a string (e.g. \\\"2 + 2\\\", \\\"sqrt(16) * 5\\\", \\\"10 ** 2 / 4\\\").\\n\\nReturns:\\n    The numerical result of evaluating the expression, or an error message.\", \"name\": \"calculate\", \"parameters\": {\"properties\": {\"expression\": {\"type\": \"STRING\"}}, \"required\": [\"expression\"], \"type\": \"OBJECT\"}}]}, {\"function_declarations\": [{\"description\": \"Converts a value between measurement units.\\n\\nArgs:\\n    value: The numerical quantity to convert.\\n    from_unit: Source unit (e.g., \\\"kg\\\", \\\"lbs\\\", \\\"km\\\", \\\"miles\\\", \\\"celsius\\\", \\\"fahrenheit\\\").\\n    to_unit: Target unit (e.g., \\\"kg\\\", \\\"lbs\\\", \\\"km\\\", \\\"miles\\\", \\\"celsius\\\", \\\"fahrenheit\\\").\\n\\nReturns:\\n    A string describing the conversion result.\", \"name\": \"unit_convert\", \"parameters\": {\"properties\": {\"value\": {\"type\": \"NUMBER\"}, \"from_unit\": {\"type\": \"STRING\"}, \"to_unit\": {\"type\": \"STRING\"}}, \"required\": [\"value\", \"from_unit\", \"to_unit\"], \"type\": \"OBJECT\"}}]}], \"sub_agents\": []}}, \"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"root_agent\", \"content\": {\"parts\": [{\"function_call\": {\"id\": \"call_16827\", \"args\": {\"expression\": \"15 * 14 + 10\"}, \"name\": \"calculate\"}}], \"role\": \"model\"}}, {\"author\": \"root_agent\", \"content\": {\"parts\": [{\"function_response\": {\"id\": \"call_16827\", \"name\": \"calculate\", \"response\": {\"result\": \"Result: 220\"}}}], \"role\": \"user\"}}, {\"author\": \"root_agent\", \"content\": {\"parts\": [{\"text\": \"15 * 14 + 10 = 220\"}], \"role\": \"model\"}}]}]}"
+      },
+      {
+        "prompt_display_text": "Convert 50 km to miles",
+        "prompt_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"Convert 50 km to miles\"\n    }\n  ],\n  \"role\": \"user\"\n}",
+        "reference": "50 km is equal to 31.07 miles.",
+        "reference_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"50 km is equal to 31.07 miles.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "response_display_text": "50 kilometers is equal to **31.07 miles**.",
+        "response_raw_json": "{\n  \"parts\": [\n    {\n      \"text\": \"50 kilometers is equal to **31.07 miles**.\"\n    }\n  ],\n  \"role\": \"model\"\n}",
+        "intermediate_events": null,
+        "agent_data": "{\"agents\": {\"root_agent\": {\"agent_id\": \"root_agent\", \"agent_type\": \"LlmAgent\", \"description\": \"\", \"instruction\": \"You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.\", \"tools\": [{\"function_declarations\": [{\"description\": \"Evaluates a mathematical expression safely.\\n\\nArgs:\\n    expression: A mathematical expression as a string (e.g. \\\"2 + 2\\\", \\\"sqrt(16) * 5\\\", \\\"10 ** 2 / 4\\\").\\n\\nReturns:\\n    The numerical result of evaluating the expression, or an error message.\", \"name\": \"calculate\", \"parameters\": {\"properties\": {\"expression\": {\"type\": \"STRING\"}}, \"required\": [\"expression\"], \"type\": \"OBJECT\"}}]}, {\"function_declarations\": [{\"description\": \"Converts a value between measurement units.\\n\\nArgs:\\n    value: The numerical quantity to convert.\\n    from_unit: Source unit (e.g., \\\"kg\\\", \\\"lbs\\\", \\\"km\\\", \\\"miles\\\", \\\"celsius\\\", \\\"fahrenheit\\\").\\n    to_unit: Target unit (e.g., \\\"kg\\\", \\\"lbs\\\", \\\"km\\\", \\\"miles\\\", \\\"celsius\\\", \\\"fahrenheit\\\").\\n\\nReturns:\\n    A string describing the conversion result.\", \"name\": \"unit_convert\", \"parameters\": {\"properties\": {\"value\": {\"type\": \"NUMBER\"}, \"from_unit\": {\"type\": \"STRING\"}, \"to_unit\": {\"type\": \"STRING\"}}, \"required\": [\"value\", \"from_unit\", \"to_unit\"], \"type\": \"OBJECT\"}}]}], \"sub_agents\": []}}, \"turns\": [{\"turn_index\": 0, \"turn_id\": \"turn_0\", \"events\": [{\"author\": \"root_agent\", \"content\": {\"parts\": [{\"function_call\": {\"id\": \"call_71440\", \"args\": {\"from_unit\": \"km\", \"value\": 50, \"to_unit\": \"miles\"}, \"name\": \"unit_convert\"}}], \"role\": \"model\"}}, {\"author\": \"root_agent\", \"content\": {\"parts\": [{\"function_response\": {\"id\": \"call_71440\", \"name\": \"unit_convert\", \"response\": {\"result\": \"50 km = 31.07 miles\"}}}], \"role\": \"user\"}}, {\"author\": \"root_agent\", \"content\": {\"parts\": [{\"text\": \"50 kilometers is equal to **31.07 miles**.\"}], \"role\": \"model\"}}]}]}"
+      }
+    ]
+  },
+  "agent_info": null
+}

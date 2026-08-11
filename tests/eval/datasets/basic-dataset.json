@@ -1,0 +1,30 @@
+{
+  "eval_cases": [
+    {
+      "eval_case_id": "math_calculation",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "What is 15 * 14 + 10?"}]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [{"text": "The answer is 220."}]
+        }
+      }
+    },
+    {
+      "eval_case_id": "unit_conversion",
+      "prompt": {
+        "role": "user",
+        "parts": [{"text": "Convert 50 km to miles"}]
+      },
+      "reference": {
+        "response": {
+          "role": "model",
+          "parts": [{"text": "50 km is equal to 31.07 miles."}]
+        }
+      }
+    }
+  ]
+}

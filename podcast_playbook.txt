@@ -1,0 +1,22 @@
+Podcast Post-Production Playbook & Production Guidelines
+
+1. Host Introduction Voice & Style:
+- Always start with an energetic and direct hook sentence that poses a compelling question or highlight.
+- Keep host intros concise (2-3 sentences max) before introducing the guest and topic.
+- Tone should be professional yet warm, high-signal, and tech-forward.
+
+2. Podcast Auto-Clipping Standards:
+- Focus on moments that contain surprising insights, direct predictions, or actionable technical advice.
+- Optimal promo clip length: 30 to 60 seconds.
+- Chapter timestamps must be formatted cleanly as (xx:xx)subtitle.
+
+3. Spotify Intro Page Requirements:
+- Title must feature guest name formatted as: "Title (feat. Guest Name)".
+- First sentence must grab attention immediately using active verbs.
+- Include a 2-sentence episode overview summarizing key takeaways.
+- Include complete timeline formatted strictly as (xx:xx)subtitle.
+
+4. SEO & Social Distribution Guidelines:
+- Primary SEO tags: AI, MachineLearning, Podcast, SoftwareEngineering, Technology.
+- Always include direct links to public assets (cover art image and MP3 highlight clip).
+- Always include an Apple & Spotify compliant RSS 2.0 item feed export.

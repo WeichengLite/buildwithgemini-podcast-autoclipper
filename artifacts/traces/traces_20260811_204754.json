@@ -1,0 +1,296 @@
+{
+  "eval_cases": [
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "What is 15 * 14 + 10?"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "15 * 14 + 10 = 220"
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "The answer is 220."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "math_calculation",
+      "agent_data": {
+        "agents": {
+          "root_agent": {
+            "agent_id": "root_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Evaluates a mathematical expression safely.\n\nArgs:\n    expression: A mathematical expression as a string (e.g. \"2 + 2\", \"sqrt(16) * 5\", \"10 ** 2 / 4\").\n\nReturns:\n    The numerical result of evaluating the expression, or an error message.",
+                    "name": "calculate",
+                    "parameters": {
+                      "properties": {
+                        "expression": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "expression"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Converts a value between measurement units.\n\nArgs:\n    value: The numerical quantity to convert.\n    from_unit: Source unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n    to_unit: Target unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n\nReturns:\n    A string describing the conversion result.",
+                    "name": "unit_convert",
+                    "parameters": {
+                      "properties": {
+                        "value": {
+                          "type": "NUMBER"
+                        },
+                        "from_unit": {
+                          "type": "STRING"
+                        },
+                        "to_unit": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "from_unit",
+                        "to_unit"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_16827",
+                        "args": {
+                          "expression": "15 * 14 + 10"
+                        },
+                        "name": "calculate"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_16827",
+                        "name": "calculate",
+                        "response": {
+                          "result": "Result: 220"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "15 * 14 + 10 = 220"
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "prompt": {
+        "parts": [
+          {
+            "text": "Convert 50 km to miles"
+          }
+        ],
+        "role": "user"
+      },
+      "responses": [
+        {
+          "response": {
+            "parts": [
+              {
+                "text": "50 kilometers is equal to **31.07 miles**."
+              }
+            ],
+            "role": "model"
+          }
+        }
+      ],
+      "reference": {
+        "response": {
+          "parts": [
+            {
+              "text": "50 km is equal to 31.07 miles."
+            }
+          ],
+          "role": "model"
+        }
+      },
+      "eval_case_id": "unit_conversion",
+      "agent_data": {
+        "agents": {
+          "root_agent": {
+            "agent_id": "root_agent",
+            "agent_type": "LlmAgent",
+            "description": "",
+            "instruction": "You are a helpful Math & Calculator Assistant. Always use the calculation or unit conversion tools to perform exact mathematical operations and conversions.",
+            "tools": [
+              {
+                "function_declarations": [
+                  {
+                    "description": "Evaluates a mathematical expression safely.\n\nArgs:\n    expression: A mathematical expression as a string (e.g. \"2 + 2\", \"sqrt(16) * 5\", \"10 ** 2 / 4\").\n\nReturns:\n    The numerical result of evaluating the expression, or an error message.",
+                    "name": "calculate",
+                    "parameters": {
+                      "properties": {
+                        "expression": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "expression"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              },
+              {
+                "function_declarations": [
+                  {
+                    "description": "Converts a value between measurement units.\n\nArgs:\n    value: The numerical quantity to convert.\n    from_unit: Source unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n    to_unit: Target unit (e.g., \"kg\", \"lbs\", \"km\", \"miles\", \"celsius\", \"fahrenheit\").\n\nReturns:\n    A string describing the conversion result.",
+                    "name": "unit_convert",
+                    "parameters": {
+                      "properties": {
+                        "value": {
+                          "type": "NUMBER"
+                        },
+                        "from_unit": {
+                          "type": "STRING"
+                        },
+                        "to_unit": {
+                          "type": "STRING"
+                        }
+                      },
+                      "required": [
+                        "value",
+                        "from_unit",
+                        "to_unit"
+                      ],
+                      "type": "OBJECT"
+                    }
+                  }
+                ]
+              }
+            ],
+            "sub_agents": []
+          }
+        },
+        "turns": [
+          {
+            "turn_index": 0,
+            "turn_id": "turn_0",
+            "events": [
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_call": {
+                        "id": "call_71440",
+                        "args": {
+                          "from_unit": "km",
+                          "value": 50,
+                          "to_unit": "miles"
+                        },
+                        "name": "unit_convert"
+                      }
+                    }
+                  ],
+                  "role": "model"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "function_response": {
+                        "id": "call_71440",
+                        "name": "unit_convert",
+                        "response": {
+                          "result": "50 km = 31.07 miles"
+                        }
+                      }
+                    }
+                  ],
+                  "role": "user"
+                }
+              },
+              {
+                "author": "root_agent",
+                "content": {
+                  "parts": [
+                    {
+                      "text": "50 kilometers is equal to **31.07 miles**."
+                    }
+                  ],
+                  "role": "model"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
