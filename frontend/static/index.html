@@ -455,9 +455,17 @@
           <span class="live-badge" id="video-teaser-badge">Ready</span>
         </div>
         <div class="media-box" id="video-teaser-box">
-          <span id="video-teaser-placeholder">Use 'Video Trailer Tip' on left</span>
+          <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;">
+            <source src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4" type="video/mp4" />
+            Your browser does not support playing MP4 videos.
+          </video>
         </div>
-        <button class="action-btn-secondary" onclick="usePromptTip('teaser_video')">💡 Video Prompt Tip</button>
+        <div style="display:flex;gap:0.4rem;">
+          <button class="action-btn-secondary" style="flex:1;" onclick="usePromptTip('teaser_video')">💡 Video Prompt Tip</button>
+          <button class="action-btn-secondary" id="download-video-btn" style="flex:1;background:var(--accent-light);color:var(--accent);border-color:#d8b4fe;" onclick="downloadVideoTrailer()">
+            <span class="material-symbols-outlined">download</span> Download Video
+          </button>
+        </div>
       </div>
 
       <!-- 3. Spotify Intro & Show Notes Panel -->
@@ -610,6 +618,7 @@ const DEFAULT_EPISODES = [
 let episodes = JSON.parse(localStorage.getItem("podcast_episodes")) || DEFAULT_EPISODES;
 let currentEpId = localStorage.getItem("current_episode_id") || "ep_001";
 let currentCoverArtUrl = `https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/cover_arts/${currentEpId}.png`;
+let currentVideoUrl = `https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/${currentEpId}.mp4`;
 
 function toggleTheme() {
   const isDark = document.body.classList.toggle("dark");
@@ -697,6 +706,9 @@ function switchEpisode(epId) {
 
   currentCoverArtUrl = `https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/cover_arts/${epId}.png`;
   setCoverArtUrl(currentCoverArtUrl);
+
+  currentVideoUrl = `https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/${epId}.mp4`;
+  setVideoTeaserUrl(currentVideoUrl);
 
   loadEpisodeConversation(epId);
 }
@@ -921,7 +933,6 @@ function loadSampleFullAudio() {
 
 function selectTimeSegmentForCut(timeRange, segmentTitle, cutType) {
   if (cutType === "audio") {
-    // Update snippet tag in Card 4
     const snippetTag = document.getElementById("snippet-timestamp-tag");
     if (snippetTag) {
       snippetTag.textContent = `[${timeRange}]`;
@@ -956,6 +967,26 @@ function setCoverArtUrl(url) {
   `;
 }
 
+function setVideoTeaserUrl(url) {
+  if (!url) return;
+  const cleanUrl = url.split("?")[0];
+  currentVideoUrl = cleanUrl;
+  const cacheBustedUrl = `${cleanUrl}?t=${Date.now()}`;
+  const box = document.getElementById("video-teaser-box");
+  if (box) {
+    box.innerHTML = `
+      <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
+        <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;" onerror="this.outerHTML='<span style=\\'padding:1rem;color:var(--text-secondary);font-size:0.8rem;\\'>🎬 Video file loading or generate with Video Prompt Tip</span>';">
+          <source src="${cacheBustedUrl}" type="video/mp4" />
+          Your browser does not support HTML5 video player.
+        </video>
+        <span style="position:absolute;bottom:6px;right:6px;background:rgba(79,70,229,0.9);color:#fff;font-size:0.72rem;padding:3px 8px;border-radius:12px;font-weight:600;box-shadow:0 2px 6px rgba(0,0,0,0.3);">✓ Updated Live</span>
+      </div>
+    `;
+  }
+  updatePanelStatus("video-teaser", "Video Trailer Ready");
+}
+
 async function downloadCoverArt() {
   if (!currentCoverArtUrl) return alert("No cover art URL available.");
   try {
@@ -971,6 +1002,24 @@ async function downloadCoverArt() {
     URL.revokeObjectURL(blobUrl);
   } catch (err) {
     window.open(currentCoverArtUrl, "_blank");
+  }
+}
+
+async function downloadVideoTrailer() {
+  if (!currentVideoUrl) return alert("No video trailer URL available.");
+  try {
+    const response = await fetch(currentVideoUrl);
+    const blob = await response.blob();
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = blobUrl;
+    a.download = `${currentEpId}_teaser_trailer.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(blobUrl);
+  } catch (err) {
+    window.open(currentVideoUrl, "_blank");
   }
 }
 
@@ -1059,10 +1108,7 @@ function scanMediaUrls(rawText, textStr) {
   // 2. Video Trailer URLs
   const videoMatch = rawText.match(/(https?:\/\/storage\.googleapis\.com\/[^\s"'<>\)]+\.(mp4|webm))/i);
   if (videoMatch) {
-    const videoUrl = videoMatch[1];
-    const box = document.getElementById("video-teaser-box");
-    box.innerHTML = `<video controls autoplay loop src="${videoUrl}" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;"></video>`;
-    updatePanelStatus("video-teaser", "Video Trailer Ready");
+    setVideoTeaserUrl(videoMatch[1]);
   }
 
   // 3. Spotify Intro & Show Notes
@@ -1170,6 +1216,20 @@ async function sendCommand(promptText) {
           <img src="${imgUrl}?t=${Date.now()}" style="width:100%;max-width:260px;border-radius:8px;display:block;margin-bottom:0.6rem;border:1px solid var(--border);" />
           <button onclick="downloadCoverArt()" class="action-btn-secondary" style="display:inline-flex;padding:0.4rem 0.85rem;font-size:0.82rem;background:var(--accent);color:#fff;border:none;">
             <span class="material-symbols-outlined" style="font-size:1rem;">download</span> Download Cover Art
+          </button>
+        </div>
+      `;
+    }
+
+    const videoMatch = raw.match(/(https?:\/\/storage\.googleapis\.com\/[^\s"'<>\)]+\.(mp4|webm))/i);
+    if (videoMatch) {
+      const videoUrl = videoMatch[1];
+      agentBody.innerHTML += `
+        <div style="margin-top:0.75rem;padding:0.75rem;background:var(--chip-bg);border:1px solid var(--border);border-radius:10px;">
+          <div style="font-weight:600;font-size:0.82rem;margin-bottom:0.5rem;color:var(--text-primary);">🎬 Generated Teaser Video:</div>
+          <video controls autoplay loop muted playsinline src="${videoUrl}?t=${Date.now()}" style="width:100%;max-width:320px;border-radius:8px;display:block;margin-bottom:0.6rem;border:1px solid var(--border);"></video>
+          <button onclick="downloadVideoTrailer()" class="action-btn-secondary" style="display:inline-flex;padding:0.4rem 0.85rem;font-size:0.82rem;background:var(--accent);color:#fff;border:none;">
+            <span class="material-symbols-outlined" style="font-size:1rem;">download</span> Download Teaser Video
           </button>
         </div>
       `;
