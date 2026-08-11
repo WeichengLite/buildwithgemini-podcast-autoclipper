@@ -448,18 +448,38 @@
         </div>
       </div>
 
-      <!-- 2. Video Trailer Panel (Omni Model) -->
+      <!-- 2. Video Trailer Panel (Omni Model & Upload Zone) -->
       <div class="studio-card" id="card-video-teaser">
         <div class="card-header">
           <h3><span class="material-symbols-outlined" style="color:#4f46e5;">videocam</span> 2. Video Trailer (Omni Model)</h3>
           <span class="live-badge" id="video-teaser-badge">Ready</span>
         </div>
+
+        <!-- Video Upload & Sample Controls Zone -->
+        <div style="background:var(--chip-bg);border:1px dashed var(--border);border-radius:10px;padding:0.5rem 0.75rem;display:flex;flex-direction:column;gap:0.35rem;">
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.78rem;font-weight:600;color:var(--text-primary);">
+            <span>📁 Upload Video File (.MP4/.WEBM):</span>
+            <span id="video-source-name" style="font-weight:400;color:var(--accent);">ep_001_teaser.mp4</span>
+          </div>
+          <div style="display:flex;gap:0.5rem;align-items:center;">
+            <input type="file" id="video-file-input" accept=".mp4,.webm" style="display:none;" onchange="handleVideoUpload(event)" />
+            <button class="action-btn-secondary" style="flex:1;font-size:0.75rem;padding:0.3rem 0.5rem;" onclick="document.getElementById('video-file-input').click()">
+              ⬆️ Upload MP4 Video
+            </button>
+            <button class="action-btn-secondary" style="flex:1;font-size:0.75rem;padding:0.3rem 0.5rem;" onclick="loadSampleVideoTrailer()">
+              🎬 Load Sample Video
+            </button>
+          </div>
+        </div>
+
+        <!-- Video Player Box -->
         <div class="media-box" id="video-teaser-box">
           <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;">
             <source src="https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4" type="video/mp4" />
-            Your browser does not support playing MP4 videos.
+            Your browser does not support HTML5 video player.
           </video>
         </div>
+
         <div style="display:flex;gap:0.4rem;">
           <button class="action-btn-secondary" style="flex:1;" onclick="usePromptTip('teaser_video')">💡 Video Prompt Tip</button>
           <button class="action-btn-secondary" id="download-video-btn" style="flex:1;background:var(--accent-light);color:var(--accent);border-color:#d8b4fe;" onclick="downloadVideoTrailer()">
@@ -662,7 +682,7 @@ function loadEpisodeConversation(epId) {
       <div class="msg-item agent">
         <div class="msg-avatar">🎙️</div>
         <div class="msg-body">
-          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Upload a full episode <strong>.mp3</strong> file in Card #4 or select a timestamped segment above to cut promotional clips!
+          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Upload a video trailer in Card #2 or a full episode <strong>.mp3</strong> file in Card #4 to preview and cut clips!
         </div>
       </div>
     `;
@@ -902,6 +922,29 @@ function handleScriptUpload(event) {
   reader.readAsText(file);
 }
 
+function handleVideoUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const objectUrl = URL.createObjectURL(file);
+  setVideoTeaserUrl(objectUrl);
+  const nameLabel = document.getElementById("video-source-name");
+  if (nameLabel) {
+    nameLabel.textContent = file.name;
+  }
+  updatePanelStatus("video-teaser", `Uploaded Video: ${file.name}`);
+}
+
+function loadSampleVideoTrailer() {
+  const sampleUrl = "https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/teaser_videos/ep_001.mp4";
+  setVideoTeaserUrl(sampleUrl);
+  const nameLabel = document.getElementById("video-source-name");
+  if (nameLabel) {
+    nameLabel.textContent = "ep_001_teaser.mp4";
+  }
+  updatePanelStatus("video-teaser", "Sample Video Loaded");
+}
+
 function handleFullAudioUpload(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -969,14 +1012,14 @@ function setCoverArtUrl(url) {
 
 function setVideoTeaserUrl(url) {
   if (!url) return;
-  const cleanUrl = url.split("?")[0];
+  const cleanUrl = url.startsWith("blob:") ? url : url.split("?")[0];
   currentVideoUrl = cleanUrl;
-  const cacheBustedUrl = `${cleanUrl}?t=${Date.now()}`;
+  const cacheBustedUrl = url.startsWith("blob:") ? url : `${cleanUrl}?t=${Date.now()}`;
   const box = document.getElementById("video-teaser-box");
   if (box) {
     box.innerHTML = `
       <div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
-        <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;" onerror="this.outerHTML='<span style=\\'padding:1rem;color:var(--text-secondary);font-size:0.8rem;\\'>🎬 Video file loading or generate with Video Prompt Tip</span>';">
+        <video id="video-teaser-player" controls autoplay loop muted playsinline preload="auto" style="width:100%;max-height:200px;object-fit:cover;border-radius:8px;display:block;">
           <source src="${cacheBustedUrl}" type="video/mp4" />
           Your browser does not support HTML5 video player.
         </video>
@@ -1008,6 +1051,15 @@ async function downloadCoverArt() {
 async function downloadVideoTrailer() {
   if (!currentVideoUrl) return alert("No video trailer URL available.");
   try {
+    if (currentVideoUrl.startsWith("blob:")) {
+      const a = document.createElement("a");
+      a.href = currentVideoUrl;
+      a.download = `${currentEpId}_teaser_trailer.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
     const response = await fetch(currentVideoUrl);
     const blob = await response.blob();
     const blobUrl = URL.createObjectURL(blob);
