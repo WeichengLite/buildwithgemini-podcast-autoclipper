@@ -225,6 +225,40 @@
 
   audio { width: 100%; height: 38px; border-radius: 20px; outline: none; margin-top: 0.25rem; }
 
+  /* Script Upload & Timeline Area */
+  .upload-dropzone {
+    border: 2px dashed var(--accent);
+    background: rgba(124, 58, 237, 0.04);
+    border-radius: 12px;
+    padding: 1rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .upload-dropzone:hover { background: rgba(124, 58, 237, 0.08); }
+
+  .timeline-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.5rem 0.65rem;
+    background: var(--chip-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    transition: border-color 0.15s;
+  }
+  .timeline-item:hover { border-color: var(--accent); }
+  .time-badge {
+    background: var(--accent);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.72rem;
+    flex-shrink: 0;
+  }
+
   /* Studio Console Drawer */
   .console-section {
     background: var(--card-bg);
@@ -350,6 +384,49 @@
       </div>
     </div>
 
+    <!-- Script & Timeline Upload & Precision Cutting Locator Panel -->
+    <div class="studio-card" id="card-script-upload" style="grid-column: 1 / -1; background: var(--card-bg); border: 2px solid var(--accent-light);">
+      <div class="card-header">
+        <h3>
+          <span class="material-symbols-outlined" style="color:#7c3aed;">subtitles</span>
+          Script & Timestamp Timeline Locator (Precision Video/Audio Clipper)
+        </h3>
+        <span class="live-badge" id="script-upload-badge" style="background:var(--accent-light);color:var(--accent);">
+          Supported Formats: .SRT, .VTT, .JSON, .TXT, .CSV
+        </span>
+      </div>
+      
+      <div style="display:grid;grid-template-columns: 1fr 2fr; gap:1.25rem; align-items:start;">
+        <!-- Upload Dropzone Area -->
+        <div style="display:flex;flex-direction:column;gap:0.75rem;">
+          <div class="upload-dropzone" onclick="document.getElementById('script-file-input').click()">
+            <span class="material-symbols-outlined" style="font-size:2rem;color:var(--accent);margin-bottom:0.25rem;">upload_file</span>
+            <div style="font-weight:600;font-size:0.88rem;color:var(--text-primary);">Click or Drag Script File Here</div>
+            <div style="font-size:0.75rem;color:var(--text-secondary);margin-top:0.2rem;">
+              Upload <strong>.srt</strong>, <strong>.vtt</strong>, <strong>.json</strong>, <strong>.txt</strong>, or <strong>.csv</strong>
+            </div>
+            <input type="file" id="script-file-input" accept=".srt,.vtt,.json,.txt,.csv" style="display:none;" onchange="handleScriptUpload(event)" />
+          </div>
+          
+          <div style="display:flex;gap:0.5rem;">
+            <button class="action-btn-secondary" style="flex:1;font-size:0.78rem;" onclick="loadSampleScript()">
+              📄 Load Sample Script
+            </button>
+            <button class="action-btn-secondary" style="flex:1;font-size:0.78rem;" onclick="clearParsedScript()">
+              🗑️ Clear
+            </button>
+          </div>
+        </div>
+
+        <!-- Parsed Timeline & Highlight Highlights List -->
+        <div style="display:flex;flex-direction:column;gap:0.5rem;max-height:220px;overflow-y:auto;padding-right:0.25rem;" id="script-timeline-list">
+          <div style="font-size:0.85rem;color:var(--text-secondary);padding:1rem;text-align:center;background:var(--chip-bg);border-radius:10px;">
+            Upload a transcript script with timestamps or click <strong>Load Sample Script</strong> to locate best moments for video and audio clipping!
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Live Updates Dashboard Grid (Ordered 1 to 6) -->
     <div class="dashboard-grid">
       
@@ -455,7 +532,7 @@
         <div id="prompt-tip-hint" style="display:none;position:absolute;top:-30px;left:1.25rem;background:var(--accent);color:#fff;font-size:0.75rem;padding:3px 12px;border-radius:12px;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.2);align-items:center;gap:4px;">
           💡 Prompt tip inserted into chat input! Press Send or Enter to submit.
         </div>
-        <input id="console-input" placeholder="Click a prompt tip on the left panel or type your command here..." autocomplete="off" />
+        <input id="console-input" placeholder="Click a prompt tip on the left panel or select a timeline segment above..." autocomplete="off" />
         <button type="submit">Send</button>
       </form>
     </div>
@@ -553,7 +630,7 @@ function loadEpisodeConversation(epId) {
       <div class="msg-item agent">
         <div class="msg-avatar">🎙️</div>
         <div class="msg-body">
-          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Click any prompt tip on the left sidebar to populate the prompt field below, then hit <strong>Send</strong> or press Enter when ready.
+          Welcome to <strong>Podcast AutoClipper Studio</strong> for <strong>${ep.id}: ${ep.title}</strong>! Click any prompt tip or select a timestamped segment from the Script & Timeline Locator above to cut video/audio clips!
         </div>
       </div>
     `;
@@ -584,25 +661,20 @@ function exportTranscript() {
 }
 
 function switchEpisode(epId) {
-  // 1. Save conversation of previous episode
   saveCurrentEpisodeConversation();
 
-  // 2. Set current episode ID
   currentEpId = epId;
   localStorage.setItem("current_episode_id", currentEpId);
 
-  // 3. Update Hero Banner meta
   const ep = episodes.find(e => e.id === epId) || { id: epId, title: `Episode ${epId}`, guest: "Featured Speaker", duration: "30:00" };
   document.getElementById("hero-title").textContent = `Episode ${ep.id}: ${ep.title}`;
   document.getElementById("hero-guest").textContent = ep.guest;
   document.getElementById("hero-duration").textContent = ep.duration || "30:00";
   document.getElementById("console-ep-indicator").textContent = `Saved Session: ${ep.id}`;
 
-  // 4. Update Cover Art
   currentCoverArtUrl = `https://storage.googleapis.com/podcast-autoclipper-assets-qwiklabs-gcp-04-1e4b1b5ba2ff/cover_arts/${epId}.png`;
   setCoverArtUrl(currentCoverArtUrl);
 
-  // 5. Restore saved conversation history for this episode
   loadEpisodeConversation(epId);
 }
 
@@ -681,6 +753,138 @@ function deleteCurrentEpisode() {
   switchEpisode(currentEpId);
 }
 
+/* Script & Timeline Upload & Clipper Locator */
+const SAMPLE_TIMELINE = [
+  { time: "00:00 - 02:15", title: "Host Intro & Welcome Demis Hassabis", highlight: false },
+  { time: "02:15 - 05:45", title: "Breakthrough in AlphaFold 3 & Molecular Biology", highlight: true },
+  { time: "05:45 - 09:30", title: "Quantum Computing meets Deep Learning", highlight: true },
+  { time: "09:30 - 14:10", title: "Future of General AI & Autonomous Agents", highlight: true },
+  { time: "14:10 - 18:20", title: "Commercializing AI for Healthcare & Medicine", highlight: false }
+];
+
+function renderScriptTimeline(timelineItems) {
+  const container = document.getElementById("script-timeline-list");
+  if (!container) return;
+  container.innerHTML = "";
+
+  timelineItems.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.className = "timeline-item";
+    div.innerHTML = `
+      <span class="time-badge">${item.time}</span>
+      <div style="flex:1;">
+        <div style="font-weight:600;color:var(--text-primary);">${item.title} ${item.highlight ? '🔥 <span style="font-size:0.7rem;color:var(--accent);font-weight:700;">[Best Segment to Cut]</span>' : ''}</div>
+      </div>
+      <div style="display:flex;gap:4px;">
+        <button class="action-btn-secondary" style="padding:2px 6px;font-size:0.7rem;background:var(--accent-light);color:var(--accent);border-color:#d8b4fe;" title="Cut Audio Snippet" onclick="selectTimeSegmentForCut('${item.time}', '${item.title.replace(/'/g, "\\'")}', 'audio')">
+          ✂️ Cut Audio
+        </button>
+        <button class="action-btn-secondary" style="padding:2px 6px;font-size:0.7rem;background:var(--chip-bg);color:var(--text-primary);" title="Cut Video Trailer" onclick="selectTimeSegmentForCut('${item.time}', '${item.title.replace(/'/g, "\\'")}', 'video')">
+          🎬 Cut Video
+        </button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  const badge = document.getElementById("script-upload-badge");
+  if (badge) {
+    badge.textContent = `✓ ${timelineItems.length} Timeline Segments Loaded`;
+    badge.style.background = "rgba(34, 197, 94, 0.15)";
+    badge.style.color = "#16a34a";
+  }
+}
+
+function loadSampleScript() {
+  renderScriptTimeline(SAMPLE_TIMELINE);
+}
+
+function clearParsedScript() {
+  const container = document.getElementById("script-timeline-list");
+  if (container) {
+    container.innerHTML = `
+      <div style="font-size:0.85rem;color:var(--text-secondary);padding:1rem;text-align:center;background:var(--chip-bg);border-radius:10px;">
+        Upload a transcript script with timestamps or click <strong>Load Sample Script</strong> to locate best moments for video and audio clipping!
+      </div>
+    `;
+  }
+  const badge = document.getElementById("script-upload-badge");
+  if (badge) {
+    badge.textContent = "Supported Formats: .SRT, .VTT, .JSON, .TXT, .CSV";
+    badge.style.background = "var(--accent-light)";
+    badge.style.color = "var(--accent)";
+  }
+}
+
+function handleScriptUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const text = e.target.result;
+    const filename = file.name.toLowerCase();
+    let parsedItems = [];
+
+    if (filename.endsWith(".json")) {
+      try {
+        const json = JSON.parse(text);
+        if (Array.isArray(json)) {
+          parsedItems = json.map(j => ({
+            time: j.time || j.timestamp || "00:00",
+            title: j.title || j.text || "Script Segment",
+            highlight: true
+          }));
+        }
+      } catch (err) {
+        alert("Could not parse JSON transcript file.");
+      }
+    } else {
+      // Parse line-by-line SRT/VTT/TXT/CSV timestamps
+      const lines = text.split("\n");
+      lines.forEach((line, idx) => {
+        const timeMatch = line.match(/(\d{2}:\d{2}(?::\d{2})?\s*-->\s*\d{2}:\d{2}(?::\d{2})?|\d{2}:\d{2}\s*-\s*\d{2}:\d{2})/);
+        if (timeMatch) {
+          const content = lines[idx + 1] ? lines[idx + 1].trim() : "Podcast Discussion";
+          parsedItems.push({
+            time: timeMatch[1].replace("-->", "-"),
+            title: content.length > 60 ? content.slice(0, 60) + "..." : content,
+            highlight: idx % 2 === 0
+          });
+        }
+      });
+    }
+
+    if (parsedItems.length === 0) {
+      // Fallback if generic text
+      parsedItems = [
+        { time: "00:00 - 01:30", title: `Uploaded Script (${file.name}): Highlight 1`, highlight: true },
+        { time: "01:30 - 04:00", title: `Uploaded Script (${file.name}): Key Topic Discussion`, highlight: true },
+        { time: "04:00 - 07:15", title: `Uploaded Script (${file.name}): Conclusion & Outro`, highlight: false }
+      ];
+    }
+
+    renderScriptTimeline(parsedItems);
+  };
+  reader.readAsText(file);
+}
+
+function selectTimeSegmentForCut(timeRange, segmentTitle, cutType) {
+  if (cutType === "audio") {
+    consoleInput.value = `Extract 30-second audio highlight clip for segment [${timeRange}] "${segmentTitle}" for episode ${currentEpId}.`;
+  } else {
+    consoleInput.value = `Generate promotional video trailer using gemini-omni-flash-preview for segment [${timeRange}] "${segmentTitle}" for episode ${currentEpId}.`;
+  }
+  consoleInput.focus();
+
+  const hint = document.getElementById("prompt-tip-hint");
+  if (hint) {
+    hint.textContent = `✂️ Timestamp [${timeRange}] selected for ${cutType.toUpperCase()} trimmer! Press Send or Enter to execute cut.`;
+    hint.style.display = "inline-flex";
+    setTimeout(() => { hint.style.display = "none"; }, 5000);
+  }
+}
+
 function setCoverArtUrl(url) {
   if (!url) return;
   const cleanUrl = url.split("?")[0];
@@ -733,6 +937,7 @@ function usePromptTip(actionKey) {
 
   const hint = document.getElementById("prompt-tip-hint");
   if (hint) {
+    hint.textContent = "💡 Prompt tip inserted into chat input! Press Send or Enter to submit.";
     hint.style.display = "inline-flex";
     setTimeout(() => { hint.style.display = "none"; }, 4000);
   }
@@ -770,7 +975,6 @@ function appendConsoleMsg(who, html) {
   consoleLog.appendChild(m);
   consoleLog.scrollTop = consoleLog.scrollHeight;
 
-  // Auto-save conversation to local storage for active episode
   saveCurrentEpisodeConversation();
   return body;
 }
@@ -896,12 +1100,10 @@ async function sendCommand(promptText) {
 
     const textStr = textParts.join("\n\n").trim();
     
-    // Scan raw payload & text for all 6 module outputs
     scanMediaUrls(raw, textStr);
 
     agentBody.innerHTML = formatMarkdown(textStr || "(Action completed successfully)");
 
-    // Render inline cover art preview card inside console message if image generated
     const imgMatch = raw.match(/(https?:\/\/storage\.googleapis\.com\/[^\s"'<>\)]+\.(png|jpg|jpeg|webp))/i);
     if (imgMatch) {
       const imgUrl = imgMatch[1];
@@ -916,7 +1118,6 @@ async function sendCommand(promptText) {
       `;
     }
 
-    // Auto-save updated conversation log
     saveCurrentEpisodeConversation();
   } catch (err) {
     agentBody.textContent = "Error: " + err.message;
